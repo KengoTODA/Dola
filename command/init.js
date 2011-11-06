@@ -40,14 +40,15 @@ function addTask() {
     };
 }
 
-var fs = require('fs'), LICENSE = require('./license');
+var fs = require('fs'), LICENSE = require('./license'),
+    path = require('path');
 
 function createLicense(type) {
     var text = LICENSE[type]; 
     if (!text) {
         throw 'Unknown license type: ' + type;
     }
-    fs.writeFile(process.cwd() + '/LICENSE', text, addTask());
+    fs.writeFile(path.join(process.cwd(), 'LICENSE'), text, addTask());
 }
 
 function createPackageJson(title, desc, licenseType) {
@@ -57,7 +58,7 @@ function createPackageJson(title, desc, licenseType) {
         description: desc
     };
     fs.writeFile(
-        process.cwd() + '/package.json',
+        path.join(process.cwd(), 'package.json'),
         JSON.stringify(packageData, null, 2),
         addTask());
 }
@@ -69,7 +70,7 @@ function createReadme(title, desc, licenseType) {
 }
 
 function createSource(title, desc) {
-    var esc = require('esc'), html = require('util').format("<!DOCTYPE html>\n<html>\n<head>\n  <meta http-equiv=\"content-type\" content=\"text/html;charset=UTF-8\" />\n  <title>%s</title>\n  <meta name=\"description\" content=\"%s\"\n></meta\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\" />\n</head>\n<body>\n  <script src=\"main.js\"></script>\n</body>", esc(title), esc(desc));
+    var esc = require('esc'), html = require('util').format("<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <title>%s</title>\n  <meta name=\"description\" content=\"%s\"></meta>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\" />\n</head>\n<body>\n  <script src=\"main.js\"></script>\n</body>\n</html>", esc(title), esc(desc));
     fs.writeFile('index.html', html, addTask());
     fs.writeFile('main.js', '#!/usr/bin/env node\n', addTask());
     fs.writeFile('test.js', '#!/usr/bin/env node\n', addTask());
