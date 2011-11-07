@@ -9,6 +9,11 @@ exports.parse = function () {
             desc: 'Title of your new project',
             demand: true
         })
+        .option('owner', {
+            alias: 'o',
+            desc: 'Your name',
+            'default', ''
+        })
         .option('desciption', {
             alias: 'd',
             desc: 'Description of your project',
@@ -43,11 +48,13 @@ function addTask() {
 var fs = require('fs'), LICENSE = require('./license'),
     path = require('path');
 
-function createLicense(type) {
-    var text = LICENSE[type]; 
+function createLicense(argv) {
+    var text = LICENSE[argv.license];
     if (!text) {
-        throw 'Unknown license type: ' + type;
+        throw 'Unknown license type: ' + license;
     }
+    text.replace(/<YEAR>/g, new Date().getYear() + 1900)
+        .replace(/<OWNER>/g, argv.owner);
     fs.writeFile(path.join(process.cwd(), 'LICENSE'), text, addTask());
 }
 
@@ -79,7 +86,7 @@ function createSource(title, desc) {
 
 exports.run = function (argv) {
     argv.license = argv.license.toUpperCase();
-    createLicense(argv.license);
+    createLicense(argv);
     createPackageJson(argv.title, argv.description, argv.license);
     createReadme(argv.title, argv.description, argv.license);
     createSource(argv.title, argv.description);
