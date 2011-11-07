@@ -1,15 +1,26 @@
 exports.replace = function (file, js, callback) {
     var XmlStream = require('xml-stream'),
         fs = require('fs'),
+        text, result = [],
         stream = new XmlStream(fs.createReadStream(file));
-    stream.on('updateElement: script', function (script) {
+    stream.on('startElement: script', function (script) {
         var src = script.$.src;
         if (src === 'main.js') {
-            script.$.src = null;
-            script.$text = js;
+            delete script.$.src;
+            text = js;
         } else {
-            return '';
+            text = undefined;
         }
     });
-    stream.on('data', callback);
+    stream.on('updateElement: script', function (script) {
+        if (text) {
+            script.$text = text;
+        }
+    });
+    stream.on('data', function (data) {
+        result.push(data.replace(/&quot;/g, '"'));
+    });
+    stream.on('end', function () {
+        callback(result.join(''));
+    });
 };
