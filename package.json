@@ -12,8 +12,7 @@
   "version": "0.1.0",
   "dependencies": {
     "mime": "1.2.4",
-    "esc": "0.0.1",
-    "append":"0.1.0",
+    "esc": "0.0.2",
     "optimist": "0.2.8",
     "uglify-js": "1.1.1",
     "browserify": "1.7.6",
