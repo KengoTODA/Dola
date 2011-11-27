@@ -12,7 +12,7 @@ exports.parse = function () {
         .option('owner', {
             alias: 'o',
             desc: 'Your name',
-            'default', ''
+            'default': ''
         })
         .option('desciption', {
             alias: 'd',
@@ -77,7 +77,7 @@ function createReadme(title, desc, licenseType) {
 }
 
 function createSource(title, desc) {
-    var esc = require('esc'), html = require('util').format("<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <title>%s</title>\n  <meta name=\"description\" content=\"%s\"></meta>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\" />\n</head>\n<body>\n  <script src=\"main.js\"></script>\n</body>\n</html>", esc(title), esc(desc));
+    var esc = require('esc'), html = require('underscore.string').sprintf("<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <title>%s</title>\n  <meta name=\"description\" content=\"%s\"></meta>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\" />\n</head>\n<body>\n  <script src=\"main.js\"></script>\n</body>\n</html>", esc(title), esc(desc));
     fs.writeFile('index.html', html, addTask());
     fs.writeFile('main.js', '#!/usr/bin/env node\n', addTask());
     fs.writeFile('test.js', '#!/usr/bin/env node\n', addTask());
