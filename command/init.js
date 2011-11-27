@@ -81,7 +81,7 @@ function createReadme(title, desc, licenseType) {
 }
 
 function createSource(title, desc) {
-    var esc = require('esc'), html = require('underscore.string').sprintf("<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <title>%s</title>\n  <meta name=\"description\" content=\"%s\"></meta>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\" />\n</head>\n<body>\n  <script src=\"main.js\"></script>\n</body>\n</html>", esc(title), esc(desc));
+    var esc = require('underscore').escape, html = require('underscore.string').sprintf("<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <title>%s</title>\n  <meta name=\"description\" content=\"%s\"></meta>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\" />\n</head>\n<body>\n  <script src=\"main.js\"></script>\n</body>\n</html>", esc(title), esc(desc));
     fs.writeFile(path.join(process.cwd(), title, 'index.html'), html, addTask());
     fs.writeFile(path.join(process.cwd(), title, 'main.js'), '#!/usr/bin/env node\n', addTask());
     fs.writeFile(path.join(process.cwd(), title, 'test.js'), '#!/usr/bin/env node\n', addTask());
