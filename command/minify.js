@@ -72,7 +72,7 @@ exports.parse = function () {
 
 exports.run = function (argv) {
     packageAllTo(
-        require('path').join('result', argv.output) // TODO user may want to change its name
+        require('path').join('minified', argv.output) // TODO user may want to change its name
     );
 };
 

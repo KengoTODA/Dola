@@ -49,7 +49,8 @@ var fs = require('fs'), LICENSE = require('./license'),
     path = require('path');
 
 function createDirectory(argv) {
-    fs.mkdirSync(argv.title, "0755");
+    fs.mkdirSync(argv.title, '0755');
+    fs.mkdirSync(path.join(argv.title, 'minified'), '0755');
 }
 
 function createLicense(argv) {
