@@ -1,20 +1,20 @@
 #!/usr/bin/env node
 
-function joinJavaScripts() {
-    var browserify = require('browserify'),
-        embedAssets = require('./embed/assets'),
-        b = browserify();
-    b.register('.coffee', function (body, file) {
-        return embedAssets(require('coffee-script').compile(body), file);
-    });
-    b.register('.js', function (body, file) {
-        return embedAssets(body, file);
-    });
-    b.append('main.js'); // TODO user may want to change its name
+function loadPackageJson() {
+    if (require('path').existsSync('package.json')) {
+        return JSON.parse(require('fs').readFileSync('package.json', 'utf-8'));
+    } else {
+        return {};
+    }
+}
+
+function browserify(script) {
+    var b = require('browserify')();
+    b.append(script);
     return b.bundle();
 }
 
-function compressJavaScripts(js) {
+function compressJavaScript(js) {
     var jsp = require('uglify-js').parser,
         pro = require('uglify-js').uglify,
         ast = jsp.parse(js);
@@ -24,13 +24,40 @@ function compressJavaScripts(js) {
     return pro.gen_code(ast);
 }
 
-function packageAll(filePath, js) {
-    var fs = require('fs'),
-        XmlStream = require('xml-stream'),
-        stream = fs.createReadStream('index.html'), // TODO user may want to change its name
-        xml = new XmlStream(stream);
+function scriptMark(fileName) {
+    return '&&' + fileName + '&&';
+}
 
-    
+function packageAllTo(outputFilePath) {
+    var fs = require('fs'),
+        path = require('path'),
+        Apricot = require('apricot').Apricot,
+        _ = require('underscore'),
+        scripts = [],
+        useModules = !_.isEmpty(loadPackageJson().dependencies);
+
+    Apricot.open('index.html', function (err, doc) {
+        if (err) {
+            throw err;
+        }
+        var html = doc.find('script[src]').each(function (item) {
+            scripts.push(item.src);
+            item.parentNode.insertBefore(doc.document.createTextNode(scriptMark(item.src)), item.nextSibling);
+            item.removeAttribute('src');
+        }).toHTML;
+        _.each(scripts, function (src) {
+            var script = fs.readFileSync(src, 'utf-8').toString();
+            if (useModules) {
+                script = browserify(script);
+            }
+            // TODO embed asset
+            script = compressJavaScript(script);
+            html = html.replace(
+                '</script>' + scriptMark(src),
+                script + '</script>');
+        });
+        fs.writeFileSync(outputFilePath, html);
+    });
 }
  
 exports.parse = function () {
@@ -44,11 +71,8 @@ exports.parse = function () {
 };
 
 exports.run = function (argv) {
-    var js = joinJavaScripts();
-    js = compressJavaScripts(js);
-    packageAll(
-        require('path').join('result', argv.output), // TODO user may want to change its name
-        js
+    packageAllTo(
+        require('path').join('result', argv.output) // TODO user may want to change its name
     );
 };
 

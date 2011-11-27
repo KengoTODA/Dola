@@ -15,10 +15,9 @@
     "optimist": "0.2.8",
     "uglify-js": "1.1.1",
     "browserify": "1.7.6",
-    "xml-stream": "0.3.3",
+    "apricot": "0.0.5",
     "underscore": "1.2.2",
-    "underscore.string": "2.0.0",
-    "coffee-script": "1.1.2"
+    "underscore.string": "2.0.0"
   },
   "engines": {
     "node": "0.4.x"
