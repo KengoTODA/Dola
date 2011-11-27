@@ -48,6 +48,10 @@ function addTask() {
 var fs = require('fs'), LICENSE = require('./license'),
     path = require('path');
 
+function createDirectory(argv) {
+    fs.mkdirSync(argv.title, "0755");
+}
+
 function createLicense(argv) {
     var text = LICENSE[argv.license];
     if (!text) {
@@ -55,7 +59,7 @@ function createLicense(argv) {
     }
     text.replace(/<YEAR>/g, new Date().getYear() + 1900)
         .replace(/<OWNER>/g, argv.owner);
-    fs.writeFile(path.join(process.cwd(), 'LICENSE'), text, addTask());
+    fs.writeFile(path.join(process.cwd(), argv.title, 'LICENSE'), text, addTask());
 }
 
 function createPackageJson(title, desc, licenseType) {
@@ -65,7 +69,7 @@ function createPackageJson(title, desc, licenseType) {
         description: desc
     };
     fs.writeFile(
-        path.join(process.cwd(), 'package.json'),
+        path.join(process.cwd(), title, 'package.json'),
         JSON.stringify(packageData, null, 2),
         addTask());
 }
@@ -73,19 +77,20 @@ function createPackageJson(title, desc, licenseType) {
 function createReadme(title, desc, licenseType) {
     var text = '';
 
-    fs.writeFile('README.md', text, addTask());
+    fs.writeFile(path.join(process.cwd(), title, 'README.md'), text, addTask());
 }
 
 function createSource(title, desc) {
     var esc = require('esc'), html = require('underscore.string').sprintf("<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <title>%s</title>\n  <meta name=\"description\" content=\"%s\"></meta>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\" />\n</head>\n<body>\n  <script src=\"main.js\"></script>\n</body>\n</html>", esc(title), esc(desc));
-    fs.writeFile('index.html', html, addTask());
-    fs.writeFile('main.js', '#!/usr/bin/env node\n', addTask());
-    fs.writeFile('test.js', '#!/usr/bin/env node\n', addTask());
-    fs.writeFile('main.css', '@charset "utf-8";\n', addTask());
+    fs.writeFile(path.join(process.cwd(), title, 'index.html'), html, addTask());
+    fs.writeFile(path.join(process.cwd(), title, 'main.js'), '#!/usr/bin/env node\n', addTask());
+    fs.writeFile(path.join(process.cwd(), title, 'test.js'), '#!/usr/bin/env node\n', addTask());
+    fs.writeFile(path.join(process.cwd(), title, 'main.css'), '@charset "utf-8";\n', addTask());
 }
 
 exports.run = function (argv) {
     argv.license = argv.license.toUpperCase();
+    createDirectory(argv);
     createLicense(argv);
     createPackageJson(argv.title, argv.description, argv.license);
     createReadme(argv.title, argv.description, argv.license);
