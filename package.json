@@ -22,6 +22,6 @@
   "engines": {
     "node": "0.4.x"
   },
-  "bin": {"dola": "./main.js"},
-  "main": "./main.js"
+  "bin": {"dola": "lib/main.js"},
+  "main": "lib/main.js"
 }
