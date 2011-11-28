@@ -16,6 +16,7 @@
     "uglify-js": "1.1.1",
     "browserify": "1.7.6",
     "apricot": "0.0.5",
+    "burrito": "0.2.11",
     "underscore": "1.2.2",
     "underscore.string": "2.0.0"
   },
