@@ -4,14 +4,18 @@ Dola prepares your HTML5 game development environment, and helps your releasemen
 ## usage
 ### prepare development
 to prepare development, just run init command.
+
     dola init -t game-title -o your-name -l MIT
+
 This command create LICENSE, index.html, package.json
 and other files.
 
 
 ### minify your product codes
 If you are ready to release your product, run minify command.
+
     dola minify
+
 This command minify your HTML/CSS/JS to one file named
 minified/index.html.
 
