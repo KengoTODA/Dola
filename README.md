@@ -2,6 +2,19 @@
 Dola prepares your HTML5 game development environment, and helps your releasement.
 
 ## usage
+### prepare development
+to prepare development, just run init command.
+ dola init -t game-title -o your-name -l MIT
+This command create LICENSE, index.html, package.json
+and other files.
+
+
+### minify your product codes
+If you are ready to release your product, run minify command.
+ dola minify
+This command minify your HTML/CSS/JS to one file named
+minified/index.html.
+
 
 ## copyright and license
 
@@ -18,6 +31,3 @@ Dola prepares your HTML5 game development environment, and helps your releasemen
 > WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 > See the License for the specific language governing permissions and
 > limitations under the License.
-
-src/test/resources/bar.png is copied from
-https://github.com/wise9/enchant.js/blob/master/images/bar.png
